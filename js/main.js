@@ -88,7 +88,7 @@ btnAgregar.addEventListener("click", function (event) {
                         <td>${txtName.value}</td>
                         <td>${txtNumber.value}</td>
                         <td>${precio}</td>
-                    </tr>`;              
+                    </tr>`;
 
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
 
@@ -97,11 +97,11 @@ btnAgregar.addEventListener("click", function (event) {
         precioTotal.innerText = "$ " + costoTotal.toFixed(2);
 
         //Se declaran en un objeto un elemento
-        let elemento =  {
-            "cont" : cont,
-            "nombre" : txtName.value,
-            "cantidad" : txtNumber.value,
-            "precio" : precio
+        let elemento = {
+            "cont": cont,
+            "nombre": txtName.value,
+            "cantidad": txtNumber.value,
+            "precio": precio
         };
 
         //Se agregan los objetos dentro del array
@@ -112,14 +112,14 @@ btnAgregar.addEventListener("click", function (event) {
 
 
         //Se declaran en un objeto un elemento
-        let resumen =   {
-                    "cont" : cont,
-                    "totalProductos" : totalProductos,
-                    "costoTotal" : costoTotal
-                }
+        let resumen = {
+            "cont": cont,
+            "totalProductos": totalProductos,
+            "costoTotal": costoTotal
+        };
 
         //Se agrega al localStorage
-        localStorage.setItem("resumen", JSON.stringify(resumen));  
+        localStorage.setItem("resumen", JSON.stringify(resumen));
 
         //Limpia los campos
         txtName.value = "";
@@ -129,5 +129,42 @@ btnAgregar.addEventListener("click", function (event) {
         txtName.focus();
 
     }//if isValid
+
+});//btnAgregar
+
+window.addEventListener("load", function (event) {
+    event.preventDefault();
+
+    // Si no hay datos almacenados (el resultado es null), entonces inicializa la variable "datos" como un array vacío
+    // datos =  JSON.parse(this.localStorage.getItem("datos")) || [];
+
+    //Mandamos a traer el array de datos del localStore
+    if (this.localStorage.getItem("datos") != null) {
+        datos = JSON.parse(this.localStorage.getItem("datos"));
+    }//datos != null
+
+    datos.forEach((d) => {
+        let row = ` <tr>
+                        <td>${d.cont}</td>                        
+                        <td>${d.nombre}</td>
+                        <td>${d.cantidad}</td>
+                        <td>${d.precio}</td>
+                    </tr>`
+        
+        cuerpoTabla.insertAdjacentHTML("beforeend", row);
+    });
+
+    //Mandamos a traer el obejto del resumen del localStore
+    if (this.localStorage.getItem("resumen") != null) {
+        let resumen = JSON.parse(this.localStorage.getItem("resumen"));
+        costoTotal = resumen.costoTotal;
+        totalProductos = resumen.totalProductos;
+        cont = resumen.cont;
+    }//resumen != null
+
+    contadorProductos.innerText = cont;
+    productosTotal.innerText = totalProductos;
+    precioTotal.innerText = "$ " + costoTotal.toFixed(2);
+
 
 });

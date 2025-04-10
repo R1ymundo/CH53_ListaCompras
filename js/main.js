@@ -1,6 +1,7 @@
 const txtName = document.getElementById("Name");
 const txtNumber = document.getElementById("Number");
 const btnAgregar = document.getElementById("btnAgregar");
+const btnLimpiar = document.getElementById("btnClear");
 const alertValidacionesTexto = document.getElementById("alertValidacionesTexto");
 const alertValidaciones = document.getElementById("alertValidaciones");
 const tablaListaCompras = document.getElementById("tablaListaCompras");
@@ -154,7 +155,7 @@ window.addEventListener("load", function (event) {
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
     });
 
-    //Mandamos a traer el obejto del resumen del localStore
+    //Mandamos a traer el obejto del resumen del localStorage
     if (this.localStorage.getItem("resumen") != null) {
         let resumen = JSON.parse(this.localStorage.getItem("resumen"));
         costoTotal = resumen.costoTotal;
@@ -166,5 +167,29 @@ window.addEventListener("load", function (event) {
     productosTotal.innerText = totalProductos;
     precioTotal.innerText = "$ " + costoTotal.toFixed(2);
 
+});// window.addEventListener load
 
-});
+btnLimpiar.addEventListener("click", function(event){
+    
+    event.preventDefault();
+
+    //Reiniciamos los alerts
+    alertValidacionesTexto.innerHTML = "";
+    alertValidaciones.style.display = "none";
+    
+    //Reiniciamos los valores
+    contadorProductos.innerText = "0";
+    productosTotal.innerText = "0";
+    precioTotal.innerText = "$ 0.00";
+
+    //Borramos el contenido de la tabla
+    cuerpoTabla.innerHTML = "";
+
+    //Borramos el localStorage de datos y resumen
+    localStorage.removeItem("datos");
+    localStorage.removeItem("resumen");
+
+    //Manda directo al campo de txtName
+    txtName.focus();
+
+});// btnLimpiar

@@ -15,6 +15,9 @@ let cont = 0;
 let costoTotal = 0;
 let totalProductos = 0;
 
+//Areglo de los productos
+let datos = new Array();
+
 function validarCantidad() {
 
     //Validar la longitud del campo txtNumber
@@ -48,7 +51,6 @@ btnAgregar.addEventListener("click", function (event) {
     //Bandera, al ser true permite agregar los datos a la tabla
     let isValid = true;
 
-
     //Reiniciar a campos vacios
     txtName.style.border = "";
     txtNumber.style.border = "";
@@ -78,23 +80,46 @@ btnAgregar.addEventListener("click", function (event) {
         cont++;
 
         let precio = getPrecio();
+        costoTotal += (precio * Number(txtNumber.value));
+        totalProductos += Number(txtNumber.value);
 
         let row = ` <tr>
                         <td>${cont}</td>
                         <td>${txtName.value}</td>
                         <td>${txtNumber.value}</td>
                         <td>${precio}</td>
-                    </tr>`;
+                    </tr>`;              
 
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
 
         contadorProductos.innerText = cont;
-
-        costoTotal += (precio * Number(txtNumber.value));
         productosTotal.innerText = totalProductos;
-
-        totalProductos += Number(txtNumber.value);
         precioTotal.innerText = "$ " + costoTotal.toFixed(2);
+
+        //Se declaran en un objeto un elemento
+        let elemento =  {
+            "cont" : cont,
+            "nombre" : txtName.value,
+            "cantidad" : txtNumber.value,
+            "precio" : precio
+        };
+
+        //Se agregan los objetos dentro del array
+        datos.push(elemento);
+
+        //Se agrega al localStorage
+        localStorage.setItem("datos", JSON.stringify(datos));
+
+
+        //Se declaran en un objeto un elemento
+        let resumen =   {
+                    "cont" : cont,
+                    "totalProductos" : totalProductos,
+                    "costoTotal" : costoTotal
+                }
+
+        //Se agrega al localStorage
+        localStorage.setItem("resumen", JSON.stringify(resumen));  
 
         //Limpia los campos
         txtName.value = "";
